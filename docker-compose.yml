@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+    nginx:
+        # image: nginx:latest
+        image: fholzer/nginx-brotli
+        container_name: nginx
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./hosts:/etc/nginx/conf.d
+            - ./www:/var/www
+            - ./logs/nginx:/var/log/nginx
+        links:
+            - php
+    php:
+        build: ./php
+        container_name: php
+        links:
+            - mysql
+        volumes:
+            - ./www:/var/www
+    mysql:
+        image: mariadb
+        container_name: mysql
+        ports:
+            - "3306:3306"
+        volumes:
+         - ./mysql/my.cnf:/etc/mysql/my.cnf
+         - ./logs/mysql:/var/log/mysql
+         - ./db:/var/lib/mysql
+         # - ./data:/docker-entrypoint-initdb.d
+        # задаем пароль для root пользователя
+        # заливку дампа сайта и создание пользователя для доступа к базе снаружи будем делать позже 
+        environment:
+            MYSQL_ROOT_PASSWORD: 123
+            MYSQL_DATABASE: bitrix
+            MYSQL_USER: bitrix
+            MYSQL_PASSWORD: 123
+            MARIADB_INITDB_SKIP_TZINFO: 1
+            MARIADB_AUTO_UPGRADE: 1
