@@ -12,7 +12,7 @@ services:
             - "443:443"
         volumes:
             - ./hosts:/etc/nginx/conf.d
-            - ./www:/var/www
+            - ./www:/var/www/html
             - ./logs/nginx:/var/log/nginx
         links:
             - php
@@ -20,21 +20,19 @@ services:
         build: ./php
         container_name: php
         links:
-            - mysql
+            - db
         volumes:
-            - ./www:/var/www
-    mysql:
+            - ./www:/var/www/html
+    db:
         image: mariadb
-        container_name: mysql
+        container_name: db
         ports:
             - "3306:3306"
         volumes:
          - ./mysql/my.cnf:/etc/mysql/my.cnf
          - ./logs/mysql:/var/log/mysql
          - ./db:/var/lib/mysql
-         # - ./data:/docker-entrypoint-initdb.d
-        # задаем пароль для root пользователя
-        # заливку дампа сайта и создание пользователя для доступа к базе снаружи будем делать позже 
+         - ./data:/docker-entrypoint-initdb.d
         environment:
             MYSQL_ROOT_PASSWORD: 123
             MYSQL_DATABASE: bitrix

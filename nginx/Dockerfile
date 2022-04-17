@@ -1,4 +1,4 @@
-FROM nginx:mainline-alpine AS builder
+FROM nginx:latest AS builder
 
 # nginx:alpine contains NGINX_VERSION environment variable, like so:
 ENV NGINX_VERSION 1.20.2
@@ -31,9 +31,10 @@ RUN CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
   ./configure --with-compat $CONFARGS --add-dynamic-module=$PUSHDIR && \
   make && make install
 
-FROM nginx:alpine
+FROM nginx
 # Extract the dynamic module NCHAN from the builder image
 COPY --from=builder /usr/local/nginx/modules/ngx_http_push_stream_module.so /usr/lib/nginx/modules/ngx_http_push_stream_module.so
+COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80 443
 STOPSIGNAL SIGTERM

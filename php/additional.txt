@@ -1,0 +1,27 @@
+# Dockerfile for php additional php extensions, which are somehow not found in Alpine
+
+
+        php-common \
+        php-devel \
+        php-fedora-autoloader \
+        php-gd \
+        php-imap php-json \
+        php-ldap \
+        php-pear \
+        php-pear-DB \
+        php-pecl-apcu \
+        php-pecl-apcu-bc \
+        php-pecl-geoip \
+        php-pecl-memcache \
+        php-pecl-ssh2 \
+        php-process \
+        php-pspell \
+        php-xml \
+        php-zipstream \
+
+
+# These are adviced in bitrix setup guide for hosters
+
+        nodejs \
+        redis \
+
