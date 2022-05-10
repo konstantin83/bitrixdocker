@@ -16,6 +16,9 @@ services:
             - ./logs/nginx:/var/log/nginx
         links:
             - php
+        environment:
+            SITE_NAME: ms.local
+        
     php:
         build: ./php
         container_name: php

@@ -2,6 +2,7 @@ FROM nginx:latest AS builder
 
 # nginx:alpine contains NGINX_VERSION environment variable, like so:
 ENV NGINX_VERSION 1.20.2
+ENV SITE_NAME ms.local
 
 # Download sources
 RUN wget "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz && \
@@ -35,6 +36,15 @@ FROM nginx
 # Extract the dynamic module NCHAN from the builder image
 COPY --from=builder /usr/local/nginx/modules/ngx_http_push_stream_module.so /usr/lib/nginx/modules/ngx_http_push_stream_module.so
 COPY nginx.conf /etc/nginx/nginx.conf
+
+
+RUN mkdir /etc/nginx/ssl
+
+RUN openssl req -x509 -out $SITE_NAME.crt -keyout $SITE_NAME.key \
+  -newkey rsa:2048 -nodes -sha256 \
+  -subj '/CN=$SITE_NAME' -extensions EXT -config <( \
+   printf "[dn]\nCN=$SITE_NAME\n[req]\ndistinguished_name = dn\n[EXT]\nsubjectAltName=DNS:$SITE_NAME\nkeyUsage=digitalSignature\nextendedKeyUsage=serverAuth")
+
 
 EXPOSE 80 443
 STOPSIGNAL SIGTERM
