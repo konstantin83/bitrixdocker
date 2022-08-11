@@ -18,7 +18,10 @@ services:
             - /etc/letsencrypt/live/mirodel.ru/privkey.pem:/opt/ssl/mirodel.ru/private.key:ro
         links:
             - php
+        environment:
+            SITE_NAME: ms.local
         restart: unless-stopped
+        
     php:
         build: ./php
         container_name: php
