@@ -2,7 +2,7 @@ FROM nginx:latest AS builder
 
 # nginx:alpine contains NGINX_VERSION environment variable, like so:
 ENV NGINX_VERSION 1.20.2
-ENV SITE_NAME ms.local
+ENV SITE_NAME ms.loc
 
 # Download sources
 RUN wget "http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz && \

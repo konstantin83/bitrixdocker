@@ -8,18 +8,19 @@ services:
         extra_hosts:
             - "host.docker.internal:host-gateway"
         ports:
-            - "80:80"
-            - "443:443"
+            - "9980:80"
+            - "9443:443"
         volumes:
             - ./hosts:/etc/nginx/conf.d:ro
             - ./www:/var/www/html
             - ./logs/nginx:/var/log/nginx
-            - /etc/letsencrypt/live/mirodel.ru/fullchain.pem:/opt/ssl/mirodel.ru/public.crt:ro
-            - /etc/letsencrypt/live/mirodel.ru/privkey.pem:/opt/ssl/mirodel.ru/private.key:ro
+            - ./logs/php:/var/log/php:ro
+            - ./nginx/public.crt:/opt/ssl/public.crt:ro
+            - ./nginx/private.key:/opt/ssl/private.key:ro
         links:
             - php
         environment:
-            SITE_NAME: ms.local
+            SITE_NAME: ms.loc
         restart: unless-stopped
         
     php:
