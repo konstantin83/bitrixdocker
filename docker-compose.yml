@@ -1,51 +1,46 @@
-version: '3'
+version: "3"
 
 services:
-    nginx:
-        # image: nginx:latest
-        image: fholzer/nginx-brotli
-        container_name: nginx
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
-        ports:
-            - "9980:80"
-            - "9443:443"
-        volumes:
-            - ./hosts:/etc/nginx/conf.d:ro
-            - ./www:/var/www/html
-            - ./logs/nginx:/var/log/nginx
-            - ./logs/php:/var/log/php:ro
-            - ./nginx/public.crt:/opt/ssl/public.crt:ro
-            - ./nginx/private.key:/opt/ssl/private.key:ro
-        links:
-            - php
-        environment:
-            SITE_NAME: ms.loc
-        restart: unless-stopped
-        
-    php:
-        build: ./php
-        container_name: php
-        links:
-            - db
-        volumes:
-            - ./www:/var/www/html
-        restart: unless-stopped
-    db:
-        image: mariadb
-        container_name: db
-        ports:
-            - "3306:3306"
-        volumes:
-         - ./mysql/my.cnf:/etc/mysql/my.cnf
-         - ./logs/mysql:/var/log/mysql
-         - ./db:/var/lib/mysql
-         - ./data:/docker-entrypoint-initdb.d
-        environment:
-            MYSQL_ROOT_PASSWORD: 123
-            MYSQL_DATABASE: bitrix
-            MYSQL_USER: bitrix
-            MYSQL_PASSWORD: 123
-            MARIADB_INITDB_SKIP_TZINFO: 1
-            MARIADB_AUTO_UPGRADE: 1
-        restart: unless-stopped
+  nginx:
+    # image: nginx:latest
+    image: fholzer/nginx-brotli
+    # build: ./nginx
+    # container_name: nginx
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${EXPOSED_PORT_HTTP}:80"
+      - "${EXPOSED_PORT_HTTPS}:443"
+    volumes:
+      - ./hosts:/etc/nginx/conf.d:ro
+      - ./www:/var/www/html
+      - ./logs/nginx:/var/log/nginx
+      - ./logs/php:/var/log/php:ro
+      - ./nginx/ssl:/opt/ssl:ro
+      - /etc/localtime:/etc/localtime:ro
+    # entrypoint: sh -c "/opt/ssl/ssl.sh"
+    links:
+      - php
+    restart: unless-stopped
+
+  php:
+    build: ./php
+    # container_name: php
+    links:
+      - db
+    volumes:
+      - ./www:/var/www/html
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+  db:
+    image: mariadb
+    # container_name: db
+    ports:
+      - "${EXPOSED_PORT_MYSQL}:3306"
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./logs/mysql:/var/log/mysql
+      - ./db:/var/lib/mysql
+      - ./data:/docker-entrypoint-initdb.d
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
