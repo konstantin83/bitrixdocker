@@ -18,6 +18,23 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install -j$(nproc) gd \
         && docker-php-ext-install opcache
 
+RUN printf "\n" | pecl install -o -f redis
+RUN rm -rf /tmp/pear
+RUN docker-php-ext-enable redis
+
+RUN pecl install zip
+
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "\
+    zend_extension=xdebug \
+    [xdebug]\
+    xdebug.mode=develop,debug\
+    xdebug.client_host=host.docker.internal\
+    xdebug.client_port = 9003\
+    xdebug.start_with_request=yes\
+    xdebug.log=/var/www/html/xd.log" >> /usr/local/etc/php/conf.d/xdebug.ini
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
