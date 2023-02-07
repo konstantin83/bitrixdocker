@@ -9,8 +9,8 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "${EXPOSED_PORT_HTTP}:80"
-      - "${EXPOSED_PORT_HTTPS}:443"
+      - 80:80
+      - 443:443
     volumes:
       - ./hosts:/etc/nginx/conf.d:ro
       - ./www:/var/www/html
