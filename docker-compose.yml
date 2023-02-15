@@ -56,7 +56,6 @@ services:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - ./logs/mysql:/var/log/mysql
       - ./db:/var/lib/mysql
-      - ./data:/docker-entrypoint-initdb.d
       - /etc/localtime:/etc/localtime:ro
     environment:
       - TZ=${TZ}
