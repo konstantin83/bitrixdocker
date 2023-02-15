@@ -1,4 +1,3 @@
-# export SITE_NAME="pas.loc"
 
 export $(grep -v '^#' ../.env | xargs)
 

@@ -8,7 +8,7 @@ server {
     # ssl_certificate	/opt/ssl/public.crt;
     # ssl_certificate_key	/opt/ssl/private.key;
 
-    server_name rv.loc *.rv.loc;
+    server_name ${SITE_NAME} *.${SITE_NAME};
 
     root /var/www/html;
 
