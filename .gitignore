@@ -1,5 +1,6 @@
-/www
-/db
+/www/
+/db/
 /logs
 /.idea
 /nginx/ssl/
+!.gitkeep
