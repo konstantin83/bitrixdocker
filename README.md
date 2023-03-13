@@ -6,4 +6,6 @@
 docker-compose up -d
 ```
 #### Остановить контейнер: ####
-`docker-compose stop`
+```
+docker-compose stop
+```
