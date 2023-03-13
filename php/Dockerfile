@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 # На каждый RUN создается новый слой в образе, поэтому рекомендуется объединять команды.
 RUN apt-get update && apt-get install -y \
@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
 	libonig-dev \
 	libzip-dev \
 	libmcrypt-dev \
-        && pecl install mcrypt-1.0.3 \
+        && pecl install mcrypt \
 	&& docker-php-ext-enable mcrypt \
         && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \
 	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -42,5 +42,7 @@ ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
 RUN usermod -u 1000 www-data
 
 WORKDIR /var/www
+
+RUN wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php
 
 CMD ["php-fpm"]
