@@ -24,16 +24,15 @@ RUN docker-php-ext-enable redis
 
 RUN pecl install zip
 
-# RUN yes | pecl install xdebug \
-#     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-#     && echo "\
-#     zend_extension=xdebug \
-#     [xdebug]\
-#     xdebug.mode=develop,debug\
-#     xdebug.client_host=host.docker.internal\
-#     xdebug.client_port = 9003\
-#     xdebug.start_with_request=yes\
-#     xdebug.log=/var/www/html/xd.log" >> /usr/local/etc/php/conf.d/xdebug.ini
+# XDebug
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "[xdebug]\n \
+    xdebug.mode=develop,debug\n \
+    xdebug.client_host=host.docker.internal\n \
+    xdebug.client_port = 9003\n \
+    xdebug.start_with_request=yes\n \
+    xdebug.log=/var/www/html/xd.log\n" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -41,8 +40,6 @@ ADD php.ini /usr/local/etc/php/conf.d/40-custom.ini
 
 RUN usermod -u 1000 www-data
 
-WORKDIR /var/www
-
-RUN wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php
+WORKDIR /var/www/html
 
 CMD ["php-fpm"]
