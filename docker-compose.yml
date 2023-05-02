@@ -30,6 +30,8 @@ services:
       - php
       - db
     restart: unless-stopped
+    environment:
+      - SITE_NAME=${SITE_NAME}
     networks:
       default:
         aliases:
@@ -67,9 +69,9 @@ services:
       - MARIADB_AUTO_UPGRADE=${MARIADB_AUTO_UPGRADE}
     restart: unless-stopped
 
-  redis:
-    image: docker.io/bitnami/redis:7.0
-    environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+  # redis:
+  #   image: docker.io/bitnami/redis:7.0
+  #   environment:
+  #     # ALLOW_EMPTY_PASSWORD is recommended only for development.
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #     - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
