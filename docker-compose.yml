@@ -32,10 +32,6 @@ services:
     restart: unless-stopped
     environment:
       - SITE_NAME=${SITE_NAME}
-    networks:
-      default:
-        aliases:
-          - ${SITE_NAME}
 
   php:
     build: ./php
@@ -49,6 +45,7 @@ services:
       - TZ=${TZ}
     restart: unless-stopped
 
+  # TODO: Вынести в отдельный Dockerfile + создать tmpfs и смортировать её и указать в tmpdir в my.cnf
   db:
     image: mariadb
     # container_name: db
