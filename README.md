@@ -1,11 +1,15 @@
 # Docker-compose для Битрикс
 #### Начало: ####
-Скопируйте файл `.env.default` в `.env` и внесите свои значения переменных
+make install
 #### Запуск контейнера: ####
 ```
-docker-compose up -d
+make up -d
 ```
 #### Остановить контейнер: ####
 ```
-docker-compose stop
+make stop
+```
+#### Полный перечень доп. команд ####
+```
+make help
 ```
