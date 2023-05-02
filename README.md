@@ -1,6 +1,8 @@
 # Docker-compose для Битрикс
 #### Начало: ####
-```make install```
+```
+make install
+```
 #### Запуск контейнера: ####
 ```
 make up -d
