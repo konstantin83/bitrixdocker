@@ -19,7 +19,7 @@ up: ## Завести контейнер
 	docker compose up -d
 
 stop: ## Остановить контейнер
-	docker compose down
+	docker compose stop
 
 down:  ## Потушить контейнер
 	docker compose down
