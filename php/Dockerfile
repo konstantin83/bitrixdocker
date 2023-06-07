@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install -j$(nproc) gd \
         && docker-php-ext-install opcache \
         && docker-php-ext-install ldap \
+        && docker-php-ext-install calendar \
         && docker-php-ext-enable ldap
 
 RUN chsh -s $(which zsh) \
