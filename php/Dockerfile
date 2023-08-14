@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:${PHP_VERSION}-fpm
 
 # На каждый RUN создается новый слой в образе, поэтому рекомендуется объединять команды.
 RUN apt-get update && apt-get install -y \
@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
         unzip \
         libmcrypt-dev \
         libldb-dev libldap2-dev \
-        zsh \      
+        zsh \
+        nano \
         && pecl install mcrypt \
         && docker-php-ext-enable mcrypt \
         && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \

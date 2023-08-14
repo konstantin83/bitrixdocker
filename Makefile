@@ -13,7 +13,7 @@ install: ## Установка
 bitrix: ## Скачать установочные файлы битрикс
 	@wget http://dev.1c-bitrix.ru/download/scripts/bitrix_server_test.php -O ./www/bitrix_server_test.php 
 	@wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O ./www/bitrixsetup.php
-	@echo "<?php\nphpinfo();" > ./www/test.php
+	@echo "<?php\nphpinfo();" > ./www/index.php
 
 up: ## Завести контейнер
 	docker compose up -d
