@@ -26,7 +26,11 @@ services:
       - SITE_NAME=${SITE_NAME}
 
   php:
-    build: ./php
+    build:
+      context: ./php
+      args:
+        - TZ=${TZ}
+        - PHP_VERSION=${PHP_VERSION}
     links:
       - db
     volumes:
