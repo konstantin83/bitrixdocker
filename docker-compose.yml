@@ -42,8 +42,8 @@ services:
 
   db:
     image: mariadb
-    ports:
-      - 127.0.0.1:3306:3306
+#    ports:
+#      - 127.0.0.1:3306:3306
     volumes:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - ./logs/mysql:/var/log/mysql
