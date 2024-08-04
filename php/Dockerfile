@@ -35,7 +35,7 @@ RUN printf "\n" | pecl install -o -f redis
 RUN rm -rf /tmp/pear
 RUN docker-php-ext-enable redis
 
-RUN pecl install zip
+#RUN pecl install zip
 
 # XDebug (только с версии PHP 8+)
 # RUN yes | pecl install xdebug \
