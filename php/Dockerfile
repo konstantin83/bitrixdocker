@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
         libldb-dev libldap2-dev \
         zsh \
         nano \
-        && pecl install mcrypt \
+        && pecl install mcrypt excimer \
         && docker-php-ext-enable mcrypt \
         && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \
         && docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -35,7 +35,7 @@ RUN printf "\n" | pecl install -o -f redis
 RUN rm -rf /tmp/pear
 RUN docker-php-ext-enable redis
 
-RUN pecl install zip
+#RUN pecl install zip
 
 # XDebug (только с версии PHP 8+)
 # RUN yes | pecl install xdebug \

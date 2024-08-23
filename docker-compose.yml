@@ -1,7 +1,8 @@
-version: "3"
-
 services:
   nginx:
+    container_name: krepcom-nginx
+#    user:
+#      1005:1005
     build:
       context: ./nginx
       args:
@@ -10,7 +11,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - 127.0.0.1:80:80
+      - 127.0.0.1:${SITE_PORT}:80
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/templates/:/etc/nginx/templates
@@ -26,6 +27,9 @@ services:
       - SITE_NAME=${SITE_NAME}
 
   php:
+    container_name: krepcom-php
+    user:
+      1005:1005
     build:
       context: ./php
       args:
@@ -41,9 +45,12 @@ services:
     restart: unless-stopped
 
   db:
+    container_name: krepcom-db
+#    user:
+#      1005:1005
     image: mariadb
-    ports:
-      - 127.0.0.1:3306:3306
+#    ports:
+#      - 127.0.0.1:3306:3306
     volumes:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - ./logs/mysql:/var/log/mysql

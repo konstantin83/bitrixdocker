@@ -16,7 +16,8 @@ install: ## Установка
 		then \
 			echo [!] Файл .env не существует, копируем из .env.default; \
 			cp .env.default .env; \
-			@(printf "Укажите домен: "; read SITE_NAME && echo $$SITE_NAME && sed -i "s/\(SITE_NAME=\).*/\1$$SITE_NAME/g" .env); \
+			bash -c 'read -p "Укажите домен: " SITE_NAME && echo $$SITE_NAME && sed -i "s/\(SITE_NAME=\).*/\1$$SITE_NAME/g" .env'; \
+			bash -c 'read -p "Укажите порт: " SITE_PORT && echo $$SITE_PORT && sed -i "s/\(SITE_PORT=\).*/\1$$SITE_PORT/g" .env'; \
 	fi
 
 bitrix: ## Скачать установочные файлы битрикс
@@ -30,7 +31,7 @@ up: ## Завести контейнер
 			echo [!] Файл .env не существует, запустите make install; \
 			false; \
 	fi
-	@docker compose up -d
+	@docker compose -p krepcom up -d
 	@echo http://$(SITE_NAME)/
 
 stop: ## Остановить контейнер
