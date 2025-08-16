@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
         libldb-dev libldap2-dev \
         zsh \
         nano \
+		tree \
         && pecl install mcrypt excimer \
         && docker-php-ext-enable mcrypt \
         && docker-php-ext-install -j$(nproc) iconv mbstring mysqli pdo_mysql zip \
@@ -26,10 +27,6 @@ RUN apt-get update && apt-get install -y \
         && docker-php-ext-install ldap \
         && docker-php-ext-install calendar \
         && docker-php-ext-enable ldap
-
-RUN chsh -s $(which zsh) \
-        && sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
-        /usr/bin/zsh
 
 RUN printf "\n" | pecl install -o -f redis
 RUN rm -rf /tmp/pear

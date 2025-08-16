@@ -1,44 +1,47 @@
 ifneq ($(wildcard .env),)
-  $(info [+] Файл .env существует)
+#  $(info [+] Файл .env существует)
   include .env
 endif
 
 .DEFAULT_GOAL := help
 .PHONY: help
 
-help:
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
-        | sed -n 's/^\(.*\): \(.*\)##\(.*\)/\1###\3/p' \
-        | column -t  -s '###'
+help: ## Показать доступные команды
+	@awk -F':.*?## ' '/^[a-zA-Z0-9_-]+:.*##/ {printf "%-10s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-install: ## Установка
+init: setup ## Установка
 	@if ! test -f .env; \
 		then \
 			echo [!] Файл .env не существует, копируем из .env.default; \
 			cp .env.default .env; \
-			bash -c 'read -p "Укажите домен: " SITE_NAME && echo $$SITE_NAME && sed -i "s/\(SITE_NAME=\).*/\1$$SITE_NAME/g" .env'; \
-			bash -c 'read -p "Укажите порт: " SITE_PORT && echo $$SITE_PORT && sed -i "s/\(SITE_PORT=\).*/\1$$SITE_PORT/g" .env'; \
 	fi
 
-bitrix: ## Скачать установочные файлы битрикс
+
+setup: ## Скачать установочные файлы битрикс
 	@wget http://dev.1c-bitrix.ru/download/scripts/bitrix_server_test.php -O ./www/bitrix_server_test.php
 	@wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O ./www/bitrixsetup.php
-	@echo "<?php\nphpinfo();" > ./www/index.php
+	@wget https://www.1c-bitrix.ru/download/files/scripts/restore.php -O ./www/restore.php
+
+	@if ! test -f ./www/index.php; \
+		then \
+			echo [!] Файл index.php не существует, создаем; \
+			@echo "<?php\nphpinfo();" > ./www/index.php; \
+	fi
+
+	@mkdir -p ./www/upload/
 
 up: ## Завести контейнер
-	@if ! test -f .env; \
-		then \
-			echo [!] Файл .env не существует, запустите make install; \
-			false; \
-	fi
-	@docker compose -p krepcom up -d
-	@echo http://$(SITE_NAME)/
+	@docker compose up -d --wait
 
-stop: ## Остановить контейнер
+stop: ## Остановить контейнер (пауза)
 	@docker compose stop
 
-down:  ## Потушить контейнер
+down:  ## Остановить контейнер
 	@docker compose down
+
+restart: ## Перезапустить контейнер
+	@docker compose down && \
+	docker compose up -d --wait;
 
 build: ## Собрать контейнер (без вывода)
 	@docker compose build
@@ -46,5 +49,5 @@ build: ## Собрать контейнер (без вывода)
 buildv: ## Собрать контейнер (с подробным выводом)
 	@docker compose build --progress plain
 
-buildf: ## Собрать контейнер (с подробным выводом и без кеша)
+buildf: ## Пересобрать контейнер с нуля без кеша (с подробным выводом)
 	@docker compose build --progress plain --no-cache
