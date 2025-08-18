@@ -20,8 +20,9 @@ Redis используется для кэширования и хранения
 
 ## Установка и запуск контейнера
 
-1. Убедитесь, что у вас установлен Docker и Docker Compose. [Инструкция по установке](https://docs.docker.com/compose/install/)
-2. Выполните команду:
+1. Убедитесь, что у вас установлен Docker и Docker Compose. [Инструкция по установке](https://docs.docker.com/compose/install/). А также Makefile [Инструкция по установке Makefile](https://www.gnu.org/software/make/).
+
+2. В папке проекта выполните команду:
 
    ```bash
    make init
@@ -58,6 +59,31 @@ make restart
 ```bash
 make help
 ```
+
+## Установка на Windows немного отличается от Linux и Macos
+
+Вместо команд с make выполните следующие:
+
+1. Скопируйте файл `.env.default` в `.env` и создайте папку `www/uploads`
+
+2. Скачайте файл по ссылке `https://www.1c-bitrix.ru/download/files/scripts/restore.php` и поместите его в папку `www/`
+
+3. Запустите контейнеры с помощью команды:
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Чтобы установить Битрикс, перейдите в браузере на [скрипт установки Битрикс](http://localhost/bitrixsetup.php) и следуйте инструкциям установщика.
+
+5. Чтобы перезагрузить контейнеры, выполните команду:
+   ```bash
+   docker-compose restart
+   ```
+
+6. Чтобы остановить контейнеры, выполните команду:
+   ```bash
+   docker-compose stop
+   ```
 
 ## PHPStorm
 
