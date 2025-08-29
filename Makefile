@@ -26,7 +26,7 @@ setup: ## Скачать установочные файлы битрикс
 	@if ! test -f ./www/index.php; \
 		then \
 			echo [!] Файл index.php не существует, создаем; \
-			@echo "<?php\nphpinfo();" > ./www/index.php; \
+			echo "<?php\nphpinfo();" > ./www/index.php; \
 	fi
 
 up: ## Завести контейнер
