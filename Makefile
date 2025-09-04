@@ -18,6 +18,7 @@ init: setup ## Установка
 
 
 setup: ## Скачать установочные файлы битрикс
+	@mkdir -p ./www/upload/
 	@wget http://dev.1c-bitrix.ru/download/scripts/bitrix_server_test.php -O ./www/bitrix_server_test.php
 	@wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O ./www/bitrixsetup.php
 	@wget https://www.1c-bitrix.ru/download/files/scripts/restore.php -O ./www/restore.php
@@ -25,10 +26,8 @@ setup: ## Скачать установочные файлы битрикс
 	@if ! test -f ./www/index.php; \
 		then \
 			echo [!] Файл index.php не существует, создаем; \
-			@echo "<?php\nphpinfo();" > ./www/index.php; \
+			echo "<?php\nphpinfo();" > ./www/index.php; \
 	fi
-
-	@mkdir -p ./www/upload/
 
 up: ## Завести контейнер
 	@docker compose up -d --wait
