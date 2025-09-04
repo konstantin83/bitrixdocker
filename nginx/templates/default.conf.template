@@ -39,6 +39,13 @@ server {
         fastcgi_param BITRIX_ENV "local";
         fastcgi_param PHP_ADMIN_VALUE "sendmail_path = /usr/sbin/sendmail -t -i -f konstantin.sal@gmail.com";
         fastcgi_intercept_errors on;
+
+        # Увеличиваем тайм-ауты
+		fastcgi_read_timeout 300s;  # 5 минут
+		client_body_timeout 300s;   # 5 минут
+
+		add_header X-Original-Request-Uri $request_uri;
+		fastcgi_param HTTP_X_ORIGINAL_REQUEST_URI $request_uri;
     }
 
     # Hide Bitrix core
