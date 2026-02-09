@@ -4,5 +4,6 @@
 /logs
 /.idea
 /nginx/ssl/
-/redis/data/
+/redis
 !.gitkeep
+.DS_Store
