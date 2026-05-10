@@ -36,6 +36,7 @@ services:
              exec docker-php-entrypoint php-fpm"
     environment:
       - TZ=${TZ}
+      - BITRIX_ENV=local
     restart: unless-stopped
 
   db:
