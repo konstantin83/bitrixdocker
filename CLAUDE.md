@@ -71,7 +71,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - Ветка `dev` → SSH-деплой на dev-сервер (пользователь `dev`).
 - Ветка `master` → SSH-деплой на prod-сервер (пользователь `bitrix`).
-- Шаги обоих пайплайнов: `git pull` → `composer install` → `npm install && npm run build` (если есть `package.json`) → `migrate.php up`.
+- Шаги обоих пайплайнов: `git pull` → запись даты коммита в `local/.release` (release-метка для Sentry, читается в `mir.sentry/lib/Sender.php`) → `composer install` → `npm install && npm run build` (если есть `package.json`) → `migrate.php up`.
 - Merge request события не триггерят деплой (`when: never`).
 
 ## Конвенции коммитов и веток
