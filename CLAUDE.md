@@ -87,6 +87,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Папки `www/bitrix/` и `www/upload/` игнорируются — не пытаться их коммитить.
 - Nginx слушает только `127.0.0.1` (порт 80/443) и MariaDB только `127.0.0.1:3306` — снаружи хоста контейнеры недоступны.
 
+## Кэш Redis локально: обязателен `serializer` (проверено 17.09.2026)
+
+В `www/bitrix/.settings_extra.php` (case 'local') в блоке `cache.value` должна быть строка `'serializer' => 1` (`Redis::SERIALIZER_PHP`). Битрикс включает сериализатор phpredis только если он задан явно или расширение собрано с igbinary; в образе php igbinary нет, и без этой строки каждый массив уходит в Redis строкой "Array", а `Cache::initCache` всегда возвращает false. Внешне это выглядит как "кэш не работает": компоненты, `Bitrix\Main\Data\Cache` в своём коде, кэш токена СДЭК. Проверка: `docker exec krepcom-redis redis-cli --scan | head` и `redis-cli get <ключ>` не должны отдавать "Array". Файл `.settings_extra.php` вне git, после `make init` строку нужно прописать заново. На серверах dev/master проверить то же самое: `php -r 'var_dump(defined("Redis::SERIALIZER_IGBINARY"));'` должен вернуть true, иначе добавить `serializer` в их блоки.
+
 ## Сессии: `mode: separated` для устранения lock-конкуренции на корзине
 
 В `www/bitrix/.settings_extra.php` (case 'local') сессии настроены в режиме `separated`:
